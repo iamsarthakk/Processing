@@ -110,5 +110,5 @@ void draw(){
   show(r); 
  }
   
- iter++; 
+ //iter++; 
 }
