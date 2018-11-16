@@ -32,7 +32,7 @@ void keyPressed() {
 void setup(){
    
  play = true;
- frameRate(20);
+ frameRate(30);
 // size(600,600);
  fullScreen(P2D);
   n = int(size/len);
@@ -57,7 +57,7 @@ void setup(){
 }
 
 
-void show(ArrayList<PVector> r){
+void show1(ArrayList<PVector> r){
    background(0);
    if(!flag){
   PVector prev = r.get(0);
@@ -73,6 +73,16 @@ void show(ArrayList<PVector> r){
     for(int i=1;i<r.size();i++){
       line(r.get(i-1).x,r.get(i-1).y,r.get(i).x,r.get(i).y);
     }
+  }
+}
+
+void show2(ArrayList<PVector> r){
+   background(0);
+  PVector prev = r.get(0);
+  for(int i=1;i<r.size();i++){
+    PVector w =r.get(i);
+    line(prev.x,prev.y,w.x,w.y);
+    prev = w;
   }
 }
 
@@ -96,8 +106,8 @@ ArrayList<PVector> update(ArrayList<PVector> r){
     
     PVector current;
     current = new PVector();
-    current.x = (w.x+v.x)/2+Fs[0]*dt*2;
-    current.y = (w.y+v.y)/2+Fs[1]*dt*2;
+    current.x = (w.x+v.x)/2+Fs[0]*dt;
+    current.y = (w.y+v.y)/2+Fs[1]*dt;
     newr.add(current);
     v = w;
     prev = curr;
@@ -110,9 +120,7 @@ ArrayList<PVector> update(ArrayList<PVector> r){
   
 }
 
-
-
-void draw(){
+void func1(){
   ArrayList<PVector> newr;
   newr = new ArrayList<PVector>();
   temp = new ArrayList<PVector>();
@@ -154,7 +162,7 @@ void draw(){
           r.add(r.get(0));
         }
         
-        show(r);
+        show1(r);
         
        /* if(flag){
           show(temp);
@@ -162,5 +170,64 @@ void draw(){
           //line(temp.get(0).x,temp.get(0).y,temp.get(temp.size()-1).x,temp.get(temp.size()-1).y);
         }*/
      }
+}
+
+void func2(){
+  if(iter%2==0)
+  stroke(255);
+  else
+  stroke(0,0,255);
+  
+ if(play){
+  ArrayList<PVector> newr;
+  newr = new ArrayList<PVector>();
+  
+  PVector v = r.get(0);
+  newr.add(v);
+  
+  for(int i=1; i<r.size(); i++){
+    PVector w = new PVector();
+    w = r.get(i);
+    norm = sqrt((w.x - v.x)*(w.x - v.x) + ( w.y - v.y)*( w.y - v.y));
+    curr[0] = (w.x - v.x);
+    curr[1] = (w.y - v.y);
+    Fs[0] = F1[2]*curr[1]+ (curr[0]-prev[0])*8;
+    Fs[1] = -F1[2]*curr[0]+ (curr[1]-prev[1])*8;
+    
+    PVector current;
+    current = new PVector();
+    current.x = (w.x+v.x)/2+Fs[0]*dt;
+    current.y = (w.y+v.y)/2+Fs[1]*dt;
+    newr.add(current);
+    v = w;
+    prev = curr;
+   
+  }
+  
+  for(int i=0;i<r.size()/2;i++){
+    if((-r.get(i).x+r.get(r.size()-1-i).x)<0){
+      newr = new ArrayList<PVector>();
+      for(int k=0;k<i;k++){
+        newr.add(r.get(k));
+      }
+      for(int k=r.size()-1-i;k<r.size()-1;k++){
+        newr.add(r.get(k));
+      }
+      break;
+    }
+  }
+  
+  
+  newr.add(r.get(r.size()-1));
+  r = newr;
+  show2(r); 
+ }
+  
+ //iter++; 
+}
+
+void draw(){
+ // func2();
+  func1();
 
 }
