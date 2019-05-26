@@ -1,6 +1,6 @@
 int i;
 int iter = 0;
-float size = 8;
+float size = 6;
 float len = 1;
 int n;
 ArrayList<PVector> r;
@@ -227,7 +227,7 @@ void func2(){
 }
 
 void draw(){
- // func2();
-  func1();
+   func2();
+  //func1();
 
 }
